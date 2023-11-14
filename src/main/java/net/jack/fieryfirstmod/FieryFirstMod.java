@@ -1,6 +1,12 @@
 package net.jack.fieryfirstmod;
 
 import com.mojang.logging.LogUtils;
+import net.jack.fieryfirstmod.block.ModBlocks;
+import net.jack.fieryfirstmod.item.ModCreativeModeTabs;
+import net.jack.fieryfirstmod.item.ModItems;
+import net.jack.fieryfirstmod.recipe.ModRecipies;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -35,6 +41,15 @@ public class FieryFirstMod
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
+        ModCreativeModeTabs.register(modEventBus);
+
+        ModItems.register(modEventBus);
+
+        ModBlocks.register(modEventBus);
+
+        ModRecipies.register(modEventBus);
+
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
     }
@@ -46,6 +61,9 @@ public class FieryFirstMod
     // Add block items to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
+        if(event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
+            event.accept(ModItems.ENDER_POTION);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
