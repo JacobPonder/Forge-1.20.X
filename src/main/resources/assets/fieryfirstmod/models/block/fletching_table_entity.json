@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "textures": {
       "down": "minecraft:block/birch_planks",
       "east": "minecraft:block/fletching_table_side",
       "north": "minecraft:block/fletching_table_front",

@@ -1,6 +1,8 @@
 package net.jack.fieryfirstmod.block.entity;
 
+import net.jack.fieryfirstmod.recipe.FletchingTableRecipe;
 import net.jack.fieryfirstmod.screen.FletchingTableMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +15,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -25,6 +29,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class FletchingTableBLockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(3);
@@ -111,4 +117,48 @@ public class FletchingTableBLockEntity extends BlockEntity implements MenuProvid
     }
 
 
+    public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
+        if (hasRecipe()) {
+            setChanged(pLevel,pPos,pState);
+            craftItem();
+        }
+    }
+
+    private void craftItem() {
+        Optional<FletchingTableRecipe> recipe = getCurrentRecipe();
+        ItemStack result = recipe.get().getResultItem(null);
+        //test simulate?
+        this.itemStackHandler.extractItem(ARROW_SLOT,1,true);
+        this.itemStackHandler.extractItem(POTION_SLOT,1,true);
+
+        this.itemStackHandler.setStackInSlot(OUTPUT_SLOT,new ItemStack(result.getItem(),
+                this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));
+    }
+
+    private boolean hasRecipe() {
+        //need to adapt for other items
+        Optional<FletchingTableRecipe> recipe = getCurrentRecipe();
+
+        if(recipe.isEmpty()){
+            return false;
+        }
+        ItemStack result = recipe.get().getResultItem(null);
+        return  canInsertAmountInOutputSlot(result.getCount()) && canInsertItemIntoOutputSlot(result.getItem());
+    }
+
+    private Optional<FletchingTableRecipe> getCurrentRecipe() {
+        SimpleContainer invetory = new SimpleContainer((this.itemStackHandler.getSlots()));
+        for(int i = 0; i< itemStackHandler.getSlots();i++){
+            invetory.setItem(i, this.itemStackHandler.getStackInSlot(i));
+        }
+        return this.level.getRecipeManager().getRecipeFor(FletchingTableRecipe.Type.INSTANCE,invetory,level);
+    }
+
+    private boolean canInsertItemIntoOutputSlot(Item item) {
+        return this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).isEmpty() || this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).is(item);
+    }
+
+    private boolean canInsertAmountInOutputSlot(int count) {
+        return this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() +count <= this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).getMaxStackSize();
+    }
 }
