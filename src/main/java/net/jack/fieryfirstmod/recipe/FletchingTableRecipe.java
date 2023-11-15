@@ -15,13 +15,13 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class FletchingTableRecipie implements Recipe<SimpleContainer> {
+public class FletchingTableRecipe implements Recipe<SimpleContainer> {
 
     private final NonNullList<Ingredient> inputItems;
     private final ItemStack output;
     private final ResourceLocation id;
 
-    public FletchingTableRecipie(NonNullList<Ingredient> inputItems, ItemStack output, ResourceLocation id) {
+    public FletchingTableRecipe(NonNullList<Ingredient> inputItems, ItemStack output, ResourceLocation id) {
         this.inputItems = inputItems;
         this.output = output;
         this.id = id;
@@ -68,16 +68,16 @@ public class FletchingTableRecipie implements Recipe<SimpleContainer> {
         return Type.INSTANCE;
     }
 
-    public static class Type implements  RecipeType<FletchingTableRecipie> {
+    public static class Type implements  RecipeType<FletchingTableRecipe> {
         public static final Type INSTANCE = new Type();
         public static final String ID = "arrow_dipping";
     }
 
-    public static class  Serializer implements  RecipeSerializer<FletchingTableRecipie> {
+    public static class  Serializer implements  RecipeSerializer<FletchingTableRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final ResourceLocation ID = new ResourceLocation(FieryFirstMod.modName,"arrow_dipping");
         @Override
-        public FletchingTableRecipie fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        public FletchingTableRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
@@ -87,22 +87,22 @@ public class FletchingTableRecipie implements Recipe<SimpleContainer> {
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.fromJson((ingredients)));
             }
-            return new FletchingTableRecipie(inputs,output,pRecipeId);
+            return new FletchingTableRecipe(inputs,output,pRecipeId);
         }
 
         @Override
-        public @Nullable FletchingTableRecipie fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public @Nullable FletchingTableRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
             NonNullList<Ingredient> input = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
 
             for(int i=0; i<input.size(); i++){
                 input.set(i,Ingredient.fromNetwork(pBuffer));
             }
             ItemStack output = pBuffer.readItem();
-            return new FletchingTableRecipie(input, output, pRecipeId);
+            return new FletchingTableRecipe(input, output, pRecipeId);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, FletchingTableRecipie pRecipe) {
+        public void toNetwork(FriendlyByteBuf pBuffer, FletchingTableRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.inputItems.size());
 
             for(Ingredient ingredient : pRecipe.getIngredients()) {

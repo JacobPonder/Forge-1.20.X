@@ -11,8 +11,8 @@ public class ModRecipies {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FieryFirstMod.modName);
 
-    public static final RegistryObject<RecipeSerializer<FletchingTableRecipie>> FLETCHING_TABLE_SERIALIZER =
-            SERIALIZERS.register("arrow_dipping",()->FletchingTableRecipie.Serializer.INSTANCE);
+    public static final RegistryObject<RecipeSerializer<FletchingTableRecipe>> FLETCHING_TABLE_SERIALIZER =
+            SERIALIZERS.register("arrow_dipping",()->FletchingTableRecipe.Serializer.INSTANCE);
 
 
     public static void register(IEventBus eventBus){
