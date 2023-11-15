@@ -2,9 +2,13 @@ package net.jack.fieryfirstmod;
 
 import com.mojang.logging.LogUtils;
 import net.jack.fieryfirstmod.block.ModBlocks;
+import net.jack.fieryfirstmod.block.entity.ModBlockEntity;
 import net.jack.fieryfirstmod.item.ModCreativeModeTabs;
 import net.jack.fieryfirstmod.item.ModItems;
 import net.jack.fieryfirstmod.recipe.ModRecipies;
+import net.jack.fieryfirstmod.screen.FletchingTableScreen;
+import net.jack.fieryfirstmod.screen.ModMenuTypes;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,6 +53,8 @@ public class FieryFirstMod
 
         ModRecipies.register(modEventBus);
 
+        ModBlockEntity.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -81,7 +87,7 @@ public class FieryFirstMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-
+            MenuScreens.register(ModMenuTypes.FLETCHING_TABLE_MENU.get(), FletchingTableScreen::new);
         }
     }
 }
