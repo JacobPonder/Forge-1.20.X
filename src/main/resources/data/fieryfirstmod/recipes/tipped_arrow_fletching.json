@@ -1,15 +1,4 @@
 {
-  "type": "fieryfirstmod:arrow_dipping",
-  "ingedients": [
-    {
-      "item": "minecraft:arrow"
-    },
-    {
-      "item": "minecraft:lingering_potion"
-    }
-  ],
-  "output": {
-    "count": 1,
-    "item" : "minecraft:tipped_arrow"
-  }
+  "type": "minecraft:crafting_special_tippedarrow",
+  "category": "misc"
 }

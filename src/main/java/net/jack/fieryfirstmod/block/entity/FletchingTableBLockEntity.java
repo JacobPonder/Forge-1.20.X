@@ -42,19 +42,28 @@ public class FletchingTableBLockEntity extends BlockEntity implements MenuProvid
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
-
+    //unsure if needed
+    private int progress = 0;
+    private int max_progress = 1;
 
     public FletchingTableBLockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntity.FLETCHING_TABLE_BE.get(), pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
-                return 0;
+                return switch (pIndex){
+                    case 0 ->FletchingTableBLockEntity.this.progress;
+                    case 1 ->FletchingTableBLockEntity.this.max_progress;
+                    default -> 0;
+                };
             }
 
             @Override
             public void set(int pIndex, int pValue) {
-
+                switch (pIndex){
+                    case 0 ->FletchingTableBLockEntity.this.progress = pValue;
+                    case 1 ->FletchingTableBLockEntity.this.max_progress = pValue;
+                };
             }
 
             @Override
@@ -106,7 +115,7 @@ public class FletchingTableBLockEntity extends BlockEntity implements MenuProvid
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemStackHandler.serializeNBT());
-
+        pTag.putInt("fletching_table_entity.progress", progress);
         super.saveAdditional(pTag);
     }
 
@@ -114,22 +123,42 @@ public class FletchingTableBLockEntity extends BlockEntity implements MenuProvid
     public void load(CompoundTag pTag) {
         super.load(pTag);
         itemStackHandler.deserializeNBT(pTag.getCompound("inventory"));
+        progress = pTag.getInt("fletching_table_entity.progress");
     }
 
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (hasRecipe()) {
+            increaseCraftingProgress();
             setChanged(pLevel,pPos,pState);
-            craftItem();
+            if(hasProgressFinished()){
+                craftItem();
+                resetProgress();
+            }
+
+        } else{
+            resetProgress();
         }
+    }
+
+    private boolean hasProgressFinished() {
+        return progress>=max_progress;
+    }
+
+    private void resetProgress() {
+        progress = 0;
+    }
+
+    private void increaseCraftingProgress() {
+        progress++;
     }
 
     private void craftItem() {
         Optional<FletchingTableRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(null);
         //test simulate?
-        this.itemStackHandler.extractItem(ARROW_SLOT,1,true);
-        this.itemStackHandler.extractItem(POTION_SLOT,1,true);
+        this.itemStackHandler.extractItem(ARROW_SLOT,1,false);
+        this.itemStackHandler.extractItem(POTION_SLOT,1,false);
 
         this.itemStackHandler.setStackInSlot(OUTPUT_SLOT,new ItemStack(result.getItem(),
                 this.itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));

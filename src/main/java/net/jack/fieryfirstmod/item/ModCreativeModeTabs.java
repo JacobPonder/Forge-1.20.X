@@ -19,9 +19,7 @@ public class ModCreativeModeTabs {
             ()-> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.ICON_ITEM.get()))
                     .title(Component.translatable("creativetab.fiery_mod_tab"))
                     .displayItems((pParameters, pOutput) -> {
-                        pOutput.accept(ModItems.ENDER_POTION.get());
-                        pOutput.accept(Items.TIPPED_ARROW);
-                        pOutput.accept(Items.FLETCHING_TABLE);
+                        //pOutput.accept(ModItems.ENDER_POTION.get());
                         pOutput.accept(ModBlocks.FLETCHING_TABLE_ENTITY.get());
                     })
                     .build());
