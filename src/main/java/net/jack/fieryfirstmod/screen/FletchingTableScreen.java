@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class FletchingTableScreen extends AbstractContainerScreen<FletchingTableMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(FieryFirstMod.modName, "gui/fletching_table_gui.png");
+            new ResourceLocation(FieryFirstMod.modName, "textures/gui/fletching_table_gui.png");
 
     public FletchingTableScreen(FletchingTableMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "@": {
+      "item": "minecraft:flint"
+    },
+    "$": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "pattern": [
+    "@$",
+    "##",
+    "##"
+  ],
+  "result": {
+    "item": "fieryfirstmod:fletching_table_entity"
+  },
+  "show_notification": true
+}

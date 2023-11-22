@@ -1,13 +1,14 @@
 {
   "type": "fieryfirstmod:arrow_dipping",
-  "ingredients": [
+  "ingredients":[
     {
       "item": "minecraft:arrow"
     },
     {
       "item": "minecraft:glowstone_dust"
     }
-  ],
+  ]
+  ,
   "output": {
     "count": 1,
     "item" : "minecraft:spectral_arrow"
